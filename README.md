@@ -69,7 +69,7 @@ npm start
 #### Register User
 
 ```http
-/api/auth/register
+POST /api/auth/register
 ```
 
 **Request Body:**
@@ -125,7 +125,7 @@ POST /api/auth/login
 
 ### Assignment Routes
 
-#### 1. Create Assignment (User Only)
+#### Create Assignment (User Only)
 
 ```http
 POST /api/assignments/create
@@ -157,13 +157,21 @@ POST /api/assignments/create
 }
 ```
 
-#### 2. Delete Assignment (User Only)
+#### Delete Assignment (User Only)
 
 ```http
 POST /api/assignments/delete/:id
 ```
 
-#### 3. Update Assignment (User Only)
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Assignment deleted successfully"
+}
+```
+
+#### Update Assignment (User Only)
 
 ```http
 POST /api/assignments/update/:id
@@ -203,14 +211,6 @@ POST /api/assignments/update/:id
   "status": "pending",
   "feedback": "",
   "createdAt": "timestamp",
-}
-```
-
-**Response:** `200 OK`
-
-```json
-{
-  "message": "Assignment deleted successfully"
 }
 ```
 
@@ -295,7 +295,7 @@ POST /api/assignments/:id/reject
 
 ```json
 {
-  "feedback": "API route names could have been better :/" // optional
+  "feedback": "API route names could have been better :/" // ptional
 }
 ```
 
