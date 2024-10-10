@@ -6,7 +6,6 @@ A backend system for managing assignment submissions between users and admins. B
 
 - [Features](#features)
 - [Setup and Installation](#setup-and-installation)
-- [Environment Variables](#environment-variables)
 - [API Documentation](#api-documentation)
   - [Authentication Routes](#authentication-routes)
   - [Assignment Routes](#assignment-routes)
