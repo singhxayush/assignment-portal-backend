@@ -3,6 +3,7 @@
 A backend system for managing assignment submissions between users and admins. Built with Node.js, Express, and MongoDB.
 
 ## Table of Contents
+
 - [Features](#features)
 - [Setup and Installation](#setup-and-installation)
 - [Environment Variables](#environment-variables)
@@ -14,34 +15,46 @@ A backend system for managing assignment submissions between users and admins. B
 - [Error Handling](#error-handling)
 
 ## Features
+
 - User Authentication (JWT)
 - Role-based Access Control (Admin/User)
 - Assignment Creation and Management
-- Multiple Admin Assignment System
+- Multiple Admin Assignment
 - Assignment Status Tracking
-- Feedback System
+- Feedback to Assignments
 
 ## Setup and Installation
+
 1. **Clone the repository**
+
 ```bash
-git clone <repository-url>
-cd assignment-portal
+git clone https://github.com/singhxayush/assignment-portal-backend.git
+cd assignment-portal-backend
 ```
 
 2. **Install dependencies**
+
 ```bash
 npm install
 ```
 
 3. **Set up environment variables**
-Create a `.env` file in the root directory and add:
+   Create a `.env` file in the root directory and add:
+
 ```env
-PORT=5000
-MONGODB_URI=your_mongodb_uri
-JWT_SECRET=your_jwt_secret
+PORT=
+MONGO_DB_URI=
+JWT_SECRET=
 ```
 
+| Variable     | Description                       |
+| ------------ | --------------------------------- |
+| PORT         | Server port (default: 8080)       |
+| MONGO_DB_URI | MongoDB connection string         |
+| JWT_SECRET   | Secret key for JWT authentication |
+
 4. **Run the application**
+
 ```bash
 # Development
 npm run dev
@@ -50,171 +63,258 @@ npm run dev
 npm start
 ```
 
-## Environment Variables
-| Variable | Description |
-|----------|-------------|
-| PORT | Server port (default: 8080) |
-| MONGO_DB_URI | MongoDB connection string |
-| JWT_SECRET | Secret key for JWT authentication |
-
 ## API Documentation
 
 ### Authentication Routes
 
 #### Register User
+
 ```http
-POST /api/register
+/api/auth/register
 ```
+
 **Request Body:**
+
 ```json
 {
-    "fullName": "John Doe",
-    "username": "johndoe",
-    "password": "password123",
-    "isAdmin": false
+  "fullName": "John Doe",
+  "username": "johndoe",
+  "password": "password123",
+  "isAdmin": false
 }
 ```
+
 **Response:** `201 Created`
+
 ```json
 {
-    "_id": "user_id",
-    "fullName": "John Doe",
-    "username": "johndoe",
-    "isAdmin": false
+  "_id": "user_id",
+  "fullName": "John Doe",
+  "username": "johndoe",
+  "isAdmin": false
 }
 ```
 
 #### Login
+
 ```http
-POST /api/login
+POST /api/auth/login
 ```
+
 **Request Body:**
+
 ```json
 {
-    "username": "johndoe",
-    "password": "password123"
+  "username": "johndoe",
+  "password": "password123"
 }
 ```
+
 **Response:** `200 OK`
+
 ```json
 {
-    "user": {
-        "_id": "user_id",
-        "fullName": "John Doe",
-        "username": "johndoe",
-        "isAdmin": false
-    },
-    "token": "jwt_token"
+  "user": {
+    "_id": "user_id",
+    "fullName": "John Doe",
+    "username": "johndoe",
+    "isAdmin": false
+  },
+  "token": "jwt_token"
 }
 ```
 
 ### Assignment Routes
 
-#### Create Assignment (User Only)
+#### 1. Create Assignment (User Only)
+
 ```http
-POST /api/assignments
+POST /api/assignments/create
 ```
+
 **Request Body:**
+
 ```json
 {
-    "task": "Create a landing page using HTML and CSS",
-    "assignedAdmins": ["admin1", "admin2"]
+  "task": "Build a backend for user and admin assignment portal",
+  "assignedAdmins": ["admin1", "admin2", "admin3"]
 }
 ```
+
 **Response:** `201 Created`
+
 ```json
 {
-    "_id": "assignment_id",
-    "task": "Create a landing page using HTML and CSS",
-    "userId": {
-        "fullName": "John Doe",
-        "username": "johndoe"
+  "_id": "assignment_id",
+  "task": "Create a landing page using HTML and CSS",
+  "userId": {
+    "fullName": "John Doe",
+    "username": "johndoe"
+  },
+  "status": "pending",
+  "feedback": "",
+  "createdAt": "timestamp",
+  "updatedAt": "timestamp"
+}
+```
+
+#### 2. Delete Assignment (User Only)
+
+```http
+POST /api/assignments/delete/:id
+```
+
+#### 3. Update Assignment (User Only)
+
+```http
+POST /api/assignments/update/:id
+```
+
+**Request Body:**
+
+```json
+{
+  "task": "Updated Task",
+  "assignedAdmins": ["admin1", "admin2", "admin3"]
+}
+```
+
+**Response:** `201 Created`
+
+```json
+{
+  "_id": "assignment_id",
+  "task": "Create a landing page using HTML and CSS",
+  "userId": {
+    "fullName": "John Doe",
+    "username": "johndoe"
+  },
+  "assignedAdmins" {
+    {
+        "_id": "user_id",
+        "fullName": "Admin User",
+        "username": "admin1"
     },
-    "status": "pending",
-    "feedback": "",
-    "createdAt": "timestamp",
-    "updatedAt": "timestamp"
+    {
+        "_id": "user_id",
+        "fullName": "Admin User",
+        "username": "admin2"
+    }
+  },
+  "status": "pending",
+  "feedback": "",
+  "createdAt": "timestamp",
+}
+```
+
+**Response:** `200 OK`
+
+```json
+{
+  "message": "Assignment deleted successfully"
 }
 ```
 
 #### Get Assignments
+
 ```http
 GET /api/assignments
 ```
+
 **Response for Users:** `200 OK`
+
 ```json
 [
-    {
-        "_id": "assignment_id",
-        "task": "Create a landing page using HTML and CSS",
-        "status": "pending",
-        "feedback": "",
-        "createdAt": "timestamp",
-        "updatedAt": "timestamp"
-    }
+  {
+    "_id": "assignment_id",
+    "task": "Create a landing page using HTML and CSS",
+    "status": "pending",
+    "feedback": "",
+    "createdAt": "timestamp",
+    "updatedAt": "timestamp"
+  }
 ]
 ```
 
-### Admin Routes
+### User and Admin Routes
 
 #### Get All Admins
+
 ```http
 GET /api/admins
 ```
+
 **Response:** `200 OK`
+
 ```json
 [
-    {
-        "_id": "admin_id",
-        "fullName": "Admin Name",
-        "username": "admin1"
-    }
+  {
+    "_id": "admin_id",
+    "fullName": "Admin Name",
+    "username": "admin1"
+  },
+  {
+    "_id": "admin_id",
+    "fullName": "Admin 2 Name",
+    "username": "admin2"
+  }
 ]
 ```
 
 #### Accept Assignment
+
 ```http
 POST /api/assignments/:id/accept
 ```
+
 **Request Body:**
+
 ```json
 {
-    "feedback": "Great work! All requirements met."
+  "feedback": "Great work! All requirements met." // optional
 }
 ```
+
 **Response:** `200 OK`
+
 ```json
 {
-    "_id": "assignment_id",
-    "status": "accepted",
-    "feedback": "Great work! All requirements met.",
-    "updatedAt": "timestamp"
+  "_id": "assignment_id",
+  "status": "accepted",
+  "feedback": "Great work! All requirements met.",
+  "updatedAt": "timestamp"
 }
 ```
 
 #### Reject Assignment
+
 ```http
 POST /api/assignments/:id/reject
 ```
+
 **Request Body:**
+
 ```json
 {
-    "feedback": "Please improve the responsive design"
+  "feedback": "API route names could have been better :/" // optional
 }
 ```
+
 **Response:** `200 OK`
+
 ```json
 {
-    "_id": "assignment_id",
-    "status": "rejected",
-    "feedback": "Please improve the responsive design",
-    "updatedAt": "timestamp"
+  "_id": "assignment_id",
+  "status": "rejected",
+  "feedback": "Please improve the responsive design",
+  "updatedAt": "timestamp"
 }
 ```
 
 ## Database Schema
 
 ### User Schema
+
 ```javascript
 {
     fullName: String,
@@ -225,6 +325,7 @@ POST /api/assignments/:id/reject
 ```
 
 ### Assignment Schema
+
 ```javascript
 {
     userId: ObjectId (ref: 'User'),
@@ -237,14 +338,17 @@ POST /api/assignments/:id/reject
 ```
 
 ## Error Handling
+
 All endpoints return error responses in the following format:
+
 ```json
 {
-    "error": "Error message description"
+  "error": "Error message description"
 }
 ```
 
 Common HTTP Status Codes:
+
 - 200: Success
 - 201: Created
 - 400: Bad Request
