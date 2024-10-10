@@ -7,7 +7,7 @@ export const getAllAdmins = async (req, res) => {
     const admins = await User.find(
       { isAdmin: true },
       { password: 0 } // Exclude password
-    ).select("-_id -__v -isAdmin -createdAt -updatedAt"); 
+    ).select("-__v -isAdmin -createdAt -updatedAt");
 
     res.status(200).json(admins);
   } catch (error) {

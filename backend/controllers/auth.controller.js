@@ -50,7 +50,7 @@ export const register = async (req, res) => {
         _id: newUser._id,
         fullName: newUser.fullName,
         username: newUser.username,
-        profilePic: newUser.profilePic,
+        isAdmin: newUser.isAdmin,
       });
     } else {
       res.status(400).json({ error: "Invalid user data" });
@@ -66,21 +66,21 @@ export const login = async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
     const isPasswordCorrect = await bcrypt.compare(
-      password,
-      user?.password || ""
+		password,
+		user?.password || ""
     );
-
+	
     if (!user || !isPasswordCorrect) {
-      return res.status(400).json({ error: "Invalid username or password" });
+		return res.status(400).json({ error: "Invalid username or password" });
     }
-
+	
     generateTokenAndSetCookie(user._id, res);
 
     res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
-      profilePic: user.profilePic,
+      isAdmin: user.isAdmin,
     });
   } catch (error) {
     console.log("Error in login controller", error.message);
