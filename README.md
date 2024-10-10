@@ -56,7 +56,7 @@ JWT_SECRET=
 
 ```bash
 # Development
-npm run dev
+npm run server
 
 # Production
 npm start
