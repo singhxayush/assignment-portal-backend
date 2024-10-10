@@ -263,7 +263,7 @@ GET /api/admins
 #### Accept Assignment
 
 ```http
-POST /api/assignments/:id/accept
+POST /api/assignments/accept/:id
 ```
 
 **Request Body:**
@@ -288,7 +288,7 @@ POST /api/assignments/:id/accept
 #### Reject Assignment
 
 ```http
-POST /api/assignments/:id/reject
+POST /api/assignments/reject/:id
 ```
 
 **Request Body:**
