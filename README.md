@@ -295,7 +295,7 @@ POST /api/assignments/reject/:id
 
 ```json
 {
-  "feedback": "API route names could have been better :/" // ptional
+  "feedback": "API route names could have been better :/" // optional
 }
 ```
 
